@@ -40,24 +40,23 @@ public class RequestService {
         resp.forEach(System.out::println);
     }
 
-    public void parallelGetRequestWithCompletableFuture(List<String> urls) {
-        HttpClient client = HttpClient.newBuilder()
+    public List<String> parallelGetRequestWithCompletableFuture(List<String> urls) {
+        try (HttpClient client = HttpClient.newBuilder()
                 .executor(Executors.newVirtualThreadPerTaskExecutor())
-                .build();
-
-        List<String> s =  urls.parallelStream()
-                .map(URI::create)
-                .map(uri -> client.sendAsync(
-                        HttpRequest.newBuilder(uri).GET().build(), HttpResponse.BodyHandlers.ofString())
-                        .thenApply(HttpResponse::body)
-                        .exceptionally(e -> {
-                            System.out.println(e);
-                            return null;
-                        })
-                )
-                .map(CompletableFuture::join)
-                .filter(Objects::nonNull)
-                .toList();
-
+                .build()
+        ) {
+            return urls.parallelStream()
+                    .map(URI::create)
+                    .map(uri -> client.sendAsync(
+                                    HttpRequest.newBuilder(uri).GET().build(), HttpResponse.BodyHandlers.ofString())
+                            .thenApply(HttpResponse::body)
+                            .exceptionally(e -> {
+                                System.out.println(e);
+                                return null;
+                            }))
+                    .map(CompletableFuture::join)
+                    .filter(Objects::nonNull)
+                    .toList();
+        }
     }
 }
