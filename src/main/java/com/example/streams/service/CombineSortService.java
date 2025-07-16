@@ -1,17 +1,17 @@
 package com.example.streams.service;
 
 import com.example.streams.entity.Employee;
-import org.springframework.util.comparator.ComparableComparator;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CombineSortService {
     public List<Employee> sortEmployee(List<Employee> employees) {
         return employees.stream()
-                .sorted(Comparator.comparing(Employee::getSalary).reversed().thenComparing(Employee::getAge).thenComparing(Employee::getName))
+                .sorted(Comparator.comparing(Employee::getSalary, Comparator.reverseOrder())
+                        .thenComparing(Employee::getAge)
+                        .thenComparing(Employee::getName))
                 .toList();
     }
 
@@ -36,7 +36,11 @@ public class CombineSortService {
         e5.setSalary(120);
         e5.setAge(18);
         e5.setName("Stiv");
+        Employee e6 = new Employee();
+        e6.setSalary(115);
+        e6.setAge(18);
+        e6.setName("Stiv");
 
-        return Arrays.asList(e2, e1, e3, e4, e5);
+        return Arrays.asList(e2, e1, e3, e4, e5, e6);
     }
 }

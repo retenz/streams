@@ -22,14 +22,15 @@ public class TransactionService {
                 );
     }
 
-    public Map<String, Transaction> getMaxAmountOfTransactionsByCurrency(List<Transaction> transactions) {
+    public Map<String, String> getMaxAmountOfTransactionsByCurrency(List<Transaction> transactions) {
         return transactions.stream()
                 .collect(
                         Collectors.groupingBy(
                                 Transaction::getCurrency,
-                                Collectors.collectingAndThen(
+                                Collectors.teeing(
                                         Collectors.maxBy(Comparator.comparing(Transaction::getAmount)),
-                                        Optional::get
+                                        Collectors.minBy(Comparator.comparing(Transaction::getAmount)),
+                                        (max, min) -> "Max: " + max.map(Transaction::getAmount).orElse(null) + " / Min:" + min.map(Transaction::getAmount).orElse(null)
                                 ))
                         );
     }

@@ -26,7 +26,7 @@ public class StreamsApplication {
 //		TODO: перенести в тесты
         Map<String, Double> result = transactionService.getSumOfTransactionsByCurrency(transactions);
         Map<String, Optional<LocalDate>> result1 = transactionService.getMaxDateOfTransactionsByCurrency(transactions);
-        Map<String, Transaction> result2 = transactionService.getMaxAmountOfTransactionsByCurrency(transactions);
+        Map<String, String> result2 = transactionService.getMaxAmountOfTransactionsByCurrency(transactions);
 
         System.out.println(result);
         System.out.println(result1);

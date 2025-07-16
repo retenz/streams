@@ -5,7 +5,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class CollectorService {
-    public static Collector<Object, StringBuilder, String> getSelfmadeCollector() {
+    public static Collector<Object, ?, String> getSelfmadeCollector() {
         return Collector.of(
                 StringBuilder::new,
                 (sb, str) -> {
